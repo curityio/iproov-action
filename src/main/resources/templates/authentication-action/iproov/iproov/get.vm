@@ -1,0 +1,97 @@
+#*
+*  Copyright 2023 Curity AB
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*#
+
+#set ($page_symbol = "/assets/images/login-symbol-card.svg")
+
+#define ($_body)
+<script type="module" $_nonceAttr src="/assets/iProovMe.js"></script>
+<iproov-me token="$_iproovEnrolToken" base_url="$_iproovBaseUrl" debug="true" >
+
+<form action="" method="post" class="display-none" id="pollingDone">
+    <input type="hidden" name="_pollingDone" value="true"/>
+</form>
+
+<script type="text/javascript" $_nonceAttr>
+    async function postData(url, data) {
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        // submit the pollingDone form
+        document.getElementById("pollingDone").submit();
+    }
+
+    function run() {
+        const iProovMe = document.querySelector("iproov-me");
+
+        iProovMe.addEventListener("ready", iProovEvent);
+        iProovMe.addEventListener("started", iProovEvent);
+        iProovMe.addEventListener("cancelled", iProovEvent);
+        iProovMe.addEventListener("streaming", iProovEvent);
+        iProovMe.addEventListener("streamed", iProovEvent);
+        iProovMe.addEventListener("progress", iProovEvent);
+        iProovMe.addEventListener("passed", iProovEvent);
+        iProovMe.addEventListener("failed", iProovEvent);
+        iProovMe.addEventListener("error", iProovEvent);
+        iProovMe.addEventListener("unsupported", iProovEvent);
+        iProovMe.addEventListener("permission", iProovEvent);
+        iProovMe.addEventListener("permission_denied", iProovEvent);
+    }
+    function iProovEvent(ev) {
+        switch (ev.type) {
+            case "cancelled":
+                console.log("iProov canceled: " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                break;
+            case "error":
+                console.error("iProov error: " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                break;
+            case "unsupported":
+                console.log("iProov unsupported: " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                break;
+            case "permission":
+                console.log("iProov " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                break;
+            case "permission_denied":
+                console.error("iProov permission denied: " + ev.type + " - " + ev.detail.reason);
+                break;
+            case "progress":
+                console.log("iProov " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                break;
+            case "passed":
+                console.log("iProov passed: " + ev.detail.message + " (" + ev.detail.progress + "%)");
+                postData("$_iproovScanUrl", ev.detail);
+                break;
+            case "failed":
+                console.error("iProov failed: " + ev.detail.type + " " + ev.type);
+                console.error("iProov url: $_iproovScanUrl");
+                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                break;
+            default:
+                console.error("iProov " + ev.type);
+        }
+    }
+
+    window.addEventListener("DOMContentLoaded", (ev) => run());
+
+</script>
+#end
+
+#parse("layouts/default")
