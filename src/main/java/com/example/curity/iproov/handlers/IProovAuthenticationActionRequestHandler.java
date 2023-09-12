@@ -93,9 +93,6 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
 
         Map<String, Object> responseMap = _json.fromJson(enrolTokenResponse.body(HttpResponse.asString()));
 
-
-        _logger.error("Response: " + responseMap.toString());
-
         Map<String, Object> enrolResponseMap = _json.fromJson(enrolTokenResponse.body(HttpResponse.asString()));
 
         //If a token is returned from enroll token API then the user is not enrolled yet

@@ -104,7 +104,7 @@ public class IProovClient {
 
     public boolean validateUser(String subject, String userAgent, String token)
     {
-        _logger.error("Validating iProov user");
+        _logger.debug("Validating iProov user");
         URI uri = URI.create("https://" + _iproovTenant + _iproovBaseURL + ENROL_VALIDATE);
 
         HttpResponse iProovValidateResponse = _client

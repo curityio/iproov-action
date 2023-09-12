@@ -93,6 +93,5 @@ public class IProovAuthenticationActionFailedRequestHandler implements ActionCom
             throw new RuntimeException(e);
         }
         throw _exceptionFactory.redirectException(_urlPath);
-//        throw _exceptionFactory.methodNotAllowed("HTTP POST not supported for this url.");
     }
 }

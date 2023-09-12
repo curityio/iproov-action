@@ -36,10 +36,12 @@ public interface IProovAuthenticationActionConfig extends Configuration {
 
     @Description("The iProov API Key")
     @ContainsSensitiveData
+    @DefaultString("us.rp.secure.iproov.me")
     String getIproovApiKey();
 
     @Description("The iProov API Secret")
     @ContainsSensitiveData
+    @DefaultString("us.rp.secure.iproov.me")
     String getIproovApiSecret();
 
     @Description("The iProov Tenant")

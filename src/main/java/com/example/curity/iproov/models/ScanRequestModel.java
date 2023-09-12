@@ -51,7 +51,6 @@ public final class ScanRequestModel
 
     public static class Post
     {
-        private final static Logger _logger = LoggerFactory.getLogger(Post.class);
         private final boolean _isPollingDone;
         @Nullable
         private Map<String, Object> _attributes;

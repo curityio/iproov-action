@@ -19,8 +19,6 @@ package com.example.curity.iproov;
 
 import com.example.curity.iproov.config.IProovAuthenticationActionConfig;
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.attribute.*;
 import se.curity.identityserver.sdk.authenticationaction.AuthenticationAction;
@@ -56,14 +54,16 @@ public final class IProovAuthenticationAction implements AuthenticationAction
             Map<String, Object> frontendAttributes = gson.fromJson(_sessionManager.get(SCANNED_DOCUMENT).getValueOfType(String.class), Map.class);
             Map<String, Object> backendAttributes = gson.fromJson(_sessionManager.get(SCAN_ATTRIBUTES).getValueOfType(String.class), Map.class);
             backendAttributes.remove("frame"); //remove the captured frame from the attributes
-
             frontendAttributes.putAll(backendAttributes);
 
             cleanup(_sessionManager);
             _sessionManager.remove(SESSION_KEY);
 
-            return AuthenticationActionResult.successfulResult(context.getAuthenticationAttributes(),
-                    AuthenticationActionAttributes.fromAttributes(Attributes.fromMap(frontendAttributes)));
+            ContextAttributes contextAttributes = context.getAuthenticationAttributes().getContextAttributes();
+
+            SubjectAttributes subjectAttributes = SubjectAttributes.of(context.getAuthenticationAttributes().getSubjectAttributes());
+
+            return AuthenticationActionResult.successfulResult(AuthenticationAttributes.of(subjectAttributes.append(Attributes.fromMap(frontendAttributes)),contextAttributes));
         }
 
         return AuthenticationActionResult.pendingResult(prompt());
