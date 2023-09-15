@@ -18,8 +18,9 @@
 
 #define ($_body)
 <script type="module" $_nonceAttr src="/assets/iProovMe.js"></script>
-<iproov-me token="$_iproovEnrolToken" base_url="$_iproovBaseUrl" debug="true" >
-
+<div style="text-align: center;">
+<iproov-me token="$_iproovEnrolToken" base_url="$_iproovBaseUrl"/>
+</div>
 <form action="" method="post" class="display-none" id="pollingDone">
     <input type="hidden" name="_pollingDone" value="true"/>
 </form>
@@ -30,6 +31,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
+
             },
             body: JSON.stringify(data)
         });
