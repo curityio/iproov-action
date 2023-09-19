@@ -45,7 +45,7 @@ The subject attributes returned with a successful verification:
 | `passed`           | Indicates if the enrollment r verification succeeded                 |
 | `token`            | The token used to validate or verify a user                          |
 | `is_native_bridge` | Boolean value if event originates from the native bridge             |
-| `assurance_type`   |                                                                      |
+| `assurance_type`   | Genuine Presence Assurance or Liveness Assurance                     |
 
 #### Feedback
 
