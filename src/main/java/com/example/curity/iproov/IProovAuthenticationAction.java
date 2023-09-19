@@ -54,6 +54,7 @@ public final class IProovAuthenticationAction implements AuthenticationAction
             Map<String, Object> frontendAttributes = gson.fromJson(_sessionManager.get(SCANNED_DOCUMENT).getValueOfType(String.class), Map.class);
             Map<String, Object> backendAttributes = gson.fromJson(_sessionManager.get(SCAN_ATTRIBUTES).getValueOfType(String.class), Map.class);
             backendAttributes.remove("frame"); //remove the captured frame from the attributes
+            backendAttributes.remove("frame_available"); //remove the attribute `frame_available` from the attributes
             frontendAttributes.putAll(backendAttributes);
 
             cleanup(_sessionManager);
