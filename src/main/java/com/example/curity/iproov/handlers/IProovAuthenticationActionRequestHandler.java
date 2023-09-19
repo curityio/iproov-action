@@ -56,7 +56,6 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
     private final SessionManager _sessionManager;
     private final Json _json;
     private static final Gson gson = new Gson();
-    private final IntermediateAuthenticationState _authState;
     private final IProovClient _iProovClient;
     private final String _subject;
     private Boolean _isEnrolled = false;
@@ -65,8 +64,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
     {
         _sessionManager = configuration.getSessionManager();
         _json = configuration.getJson();
-        _authState = intermediateAuthenticationState;
-        _subject = _authState.getAuthenticationAttributes().getSubject();
+        _subject = intermediateAuthenticationState.getAuthenticationAttributes().getSubject();
         _iProovClient = new IProovClient(
                 configuration.getHttpClient(),
                 configuration.getIproovTenant(),
@@ -91,8 +89,6 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
 
         HttpResponse enrolTokenResponse = _iProovClient.getEnrolTokenResponse(_subject);
 
-        Map<String, Object> responseMap = _json.fromJson(enrolTokenResponse.body(HttpResponse.asString()));
-
         Map<String, Object> enrolResponseMap = _json.fromJson(enrolTokenResponse.body(HttpResponse.asString()));
 
         //If a token is returned from enroll token API then the user is not enrolled yet
@@ -108,6 +104,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
             Map<String, Object> verifyResponseMap = _json.fromJson(verifyTokenResponse.body(HttpResponse.asString()));
             token = verifyResponseMap.get("token").toString();
         }
+
         response.setResponseModel(ResponseModel.templateResponseModel(Map.of(
                         IPROOV_SCAN_URL, _urlPath,
                         IPROOV_BASE_URL, "https://" + _iProovClient.getIProovTenant(),
@@ -137,7 +134,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
             _sessionManager.put(Attribute.of(SESSION_KEY, true));
 
             Map<String, Object> verifyAttributes = _iProovClient.verifyUser(
-                    _authState.getAuthenticationAttributes().getSubject(),
+                    _subject,
                     scanRequestModel.getPostRequestModel().getUserAgent(),
                     responseToken);
 
@@ -157,7 +154,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
             String responseToken = gson.fromJson(scanAttributes, ScannedDocument.class).getToken();
 
             Boolean isValidated = _iProovClient.validateUser(
-                    _authState.getAuthenticationAttributes().getSubject(),
+                    _subject,
                     scanRequestModel.getPostRequestModel().getUserAgent(),
                     responseToken);
 
