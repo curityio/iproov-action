@@ -59,11 +59,11 @@
         switch (ev.type) {
             case "cancelled":
                 console.log("iProov canceled: " + ev.detail.message + " (" + ev.detail.progress + "%)");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             case "error":
                 console.error("iProov error: " + ev.detail.message + " (" + ev.detail.progress + "%)");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             case "unsupported":
                 console.log("iProov unsupported: " + ev.detail.message + " (" + ev.detail.progress + "%)");
@@ -84,7 +84,7 @@
             case "failed":
                 console.error("iProov failed: " + ev.detail.type + " " + ev.type);
                 console.error("iProov url: $_iproovScanUrl");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             default:
                 console.error("iProov " + ev.type);
