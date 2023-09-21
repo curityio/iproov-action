@@ -44,7 +44,7 @@ import java.util.Optional;
 import static com.example.curity.iproov.IProovAuthenticationActionConstants.FormValueNames.*;
 import static com.example.curity.iproov.IProovAuthenticationActionConstants.SessionKeys.SCANNED_DOCUMENT;
 import static com.example.curity.iproov.IProovAuthenticationActionConstants.SessionKeys.SESSION_KEY;
-import static com.example.curity.iproov.IProovAuthenticationActionConstants.SubjectAttributes.SCAN_ATTRIBUTES;
+import static com.example.curity.iproov.IProovAuthenticationActionConstants.SubjectAttributes.IPROOV_ATTRIBUTES;
 import static se.curity.identityserver.sdk.authenticationaction.completions.ActionCompletionResult.complete;
 import static se.curity.identityserver.sdk.http.HttpStatus.ACCEPTED;
 import static se.curity.identityserver.sdk.web.Response.ResponseModelScope.ANY;
@@ -141,7 +141,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
             if(verifyAttributes != null)
             {
                 _logger.debug("User successfully verified using iProov");
-                _sessionManager.put(Attribute.of(SCAN_ATTRIBUTES,  gson.toJson(verifyAttributes)));
+                _sessionManager.put(Attribute.of(IPROOV_ATTRIBUTES,  gson.toJson(verifyAttributes)));
                 return Optional.of(complete());
             }
         }
@@ -161,7 +161,7 @@ public class IProovAuthenticationActionRequestHandler implements ActionCompletio
             if(isValidated)
             {
                 _logger.debug("User successfully enrolled and validated using iProov");
-                _sessionManager.put(Attribute.of(SCAN_ATTRIBUTES,  isValidated));
+                _sessionManager.put(Attribute.of(IPROOV_ATTRIBUTES,  isValidated));
                 return Optional.of(complete());
             }
         }

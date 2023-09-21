@@ -53,7 +53,7 @@ public final class IProovAuthenticationActionConstants {
 
     public static class SubjectAttributes
     {
-        public static final String SCAN_ATTRIBUTES = "iproov_user_attributes";
+        public static final String IPROOV_ATTRIBUTES = "iproov_user_attributes";
 
     }
 
