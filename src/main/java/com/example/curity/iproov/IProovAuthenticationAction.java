@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static com.example.curity.iproov.IProovAuthenticationActionConstants.SessionKeys.SCANNED_DOCUMENT;
 import static com.example.curity.iproov.IProovAuthenticationActionConstants.SessionKeys.SESSION_KEY;
-import static com.example.curity.iproov.IProovAuthenticationActionConstants.SubjectAttributes.SCAN_ATTRIBUTES;
+import static com.example.curity.iproov.IProovAuthenticationActionConstants.SubjectAttributes.IPROOV_ATTRIBUTES;
 import static com.example.curity.iproov.Utils.cleanup;
 import static se.curity.identityserver.sdk.authenticationaction.completions.RequiredActionCompletion.PromptUser.prompt;
 
@@ -52,8 +52,9 @@ public final class IProovAuthenticationAction implements AuthenticationAction
         if (attributeView != null)
         {
             Map<String, Object> frontendAttributes = gson.fromJson(_sessionManager.get(SCANNED_DOCUMENT).getValueOfType(String.class), Map.class);
-            Map<String, Object> backendAttributes = gson.fromJson(_sessionManager.get(SCAN_ATTRIBUTES).getValueOfType(String.class), Map.class);
+            Map<String, Object> backendAttributes = gson.fromJson(_sessionManager.get(IPROOV_ATTRIBUTES).getValueOfType(String.class), Map.class);
             backendAttributes.remove("frame"); //remove the captured frame from the attributes
+            backendAttributes.remove("frame_available"); //remove the attribute `frame_available` from the attributes
             frontendAttributes.putAll(backendAttributes);
 
             cleanup(_sessionManager);

@@ -18,8 +18,9 @@
 
 #define ($_body)
 <script type="module" $_nonceAttr src="/assets/iProovMe.js"></script>
-<iproov-me token="$_iproovEnrolToken" base_url="$_iproovBaseUrl" debug="true" >
-
+<div style="text-align: center;">
+<iproov-me token="$_iproovEnrolToken" base_url="$_iproovBaseUrl"/>
+</div>
 <form action="" method="post" class="display-none" id="pollingDone">
     <input type="hidden" name="_pollingDone" value="true"/>
 </form>
@@ -30,6 +31,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
+
             },
             body: JSON.stringify(data)
         });
@@ -57,11 +59,11 @@
         switch (ev.type) {
             case "cancelled":
                 console.log("iProov canceled: " + ev.detail.message + " (" + ev.detail.progress + "%)");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             case "error":
                 console.error("iProov error: " + ev.detail.message + " (" + ev.detail.progress + "%)");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             case "unsupported":
                 console.log("iProov unsupported: " + ev.detail.message + " (" + ev.detail.progress + "%)");
@@ -82,7 +84,7 @@
             case "failed":
                 console.error("iProov failed: " + ev.detail.type + " " + ev.type);
                 console.error("iProov url: $_iproovScanUrl");
-                postData("/authn/authentication/_action/iproov/failed", ev.detail);
+                postData("$_iproovScanUrl/failed", ev.detail);
                 break;
             default:
                 console.error("iProov " + ev.type);
