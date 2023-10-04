@@ -45,13 +45,6 @@ tasks.withType<Javadoc>() {
 
 tasks.clean.get().finalizedBy("cleanIProov")
 
-//tasks.register<Copy>("copyMicroblinkUIResources") {
-//    dependsOn("copyMicroblinkFrontendResources")
-////
-////    from("node_modules/@microblink/blinkid-in-browser-sdk/ui/dist")
-////    into(layout.projectDirectory.dir("src/main/resources/webroot/assets/js"))
-//}
-
 tasks.register<Copy>("copyIProovFrontendResources") {
     dependsOn("installIProovDeps")
 
